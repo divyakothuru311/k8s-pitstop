@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vehiclemanagementapi-deploy
+  namespace: ingress-nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vehiclemanagementapi
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1     
+  template:
+    metadata:
+      name: vehiclemanagement 
+      labels:
+        app: vehiclemanagementapi
+    spec:
+      containers:
+        - name: vehiclemanagementapi
+          image: pitstop/vehiclemanagementapi:1.0
+          ports:
+            - containerPort: 5000  
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Production
+    
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vehiclemanagementapi-service
+  namespace: ingress-nginx
+spec:
+  type: NodePort
+  ports:
+  - name: "http-5000"
+    port: 5000
+    targetPort: 5000
+    nodePort: 30006
+  selector:
+    app: vehiclemanagementapi

@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: logserver-deploy
+  namespace: ingress-nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: logserver
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1      
+  template:
+    metadata:
+      name: logserver
+      labels:
+        app: logserver
+    spec:
+      containers:
+        - name: logservercon
+          image: datalust/seq:latest
+          ports:
+            - containerPort: 80  
+          env:
+            - name: ACCEPT_EULA
+              value: "Y"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: logserver-service
+  namespace: ingress-nginx
+spec:
+  type: NodePort
+  ports:
+  - name: "http-5341"
+    port: 5341
+    targetPort: 80
+    nodePort: 30003
+  selector:
+    app: logserver
+    
+

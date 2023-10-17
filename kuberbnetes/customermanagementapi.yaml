@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: customermanagementapi-deploy
+  namespace: ingress-nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: customermanagementapi
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1     
+  template:
+    metadata:
+      name: customermanagement 
+      labels:
+        app: customermanagementapi
+    spec:
+      containers:
+        - name: customermanagementapicon
+          image: pitstop/customermanagementapi:1.0
+          ports:
+            - containerPort: 5100  
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Production
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: customermanagementapi-service
+  namespace: ingress-nginx
+spec:
+  type: NodePort
+  # clusterIP: 10.100.245.125
+  ports:
+  - name: "http-5100"
+    port: 5100
+    targetPort: 5100
+    nodePort: 30005
+  selector:
+    app: customermanagementapi  
+
+    
+

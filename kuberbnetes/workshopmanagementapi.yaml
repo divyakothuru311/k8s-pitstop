@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: workshopmanagementapi-deploy
+  namespace: ingress-nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: workshopmanagementapi
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1     
+  template:
+    metadata:
+      name: workshopmanagement
+      labels:
+        app: workshopmanagementapi
+    spec:
+      containers:
+        - name: workshopmanagementapi
+          image: pitstop/workshopmanagementapi:1.0
+          ports:
+            - containerPort: 5200  
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Production
+    
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: workshopmanagementapi-service
+  namespace: ingress-nginx
+spec:
+  ports:
+  - name: http-5200
+    nodePort: 30007
+    port: 5200
+    targetPort: 5200
+  selector:
+    app: workshopmanagementapi
+  type: NodePort
+  # clusterIP:  10.100.16.170

@@ -1,0 +1,44 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nginx-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+  namespace: ingress-nginx
+spec:
+  ingressClassName: nginx
+  rules:
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: webapp-service
+                port:
+                  number: 7005
+         
+     
+          - path: /CustomerManagement(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: customermanagementapi-service
+                port:
+                  number: 5100
+        
+          - path: /VehicleManagement(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: vehiclemanagementapi-service
+                port:
+                  number: 5000
+
+          - path: /WorkshopManagement(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: workshopmanagementapi-service
+                port:
+                  number: 5200

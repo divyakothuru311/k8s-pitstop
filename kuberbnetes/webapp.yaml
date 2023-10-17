@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapp-deploy
+  namespace: ingress-nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: webapp
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1     
+  template:
+    metadata:
+      name: webapp
+      labels:
+        app: webapp
+    spec:
+      containers:
+        - name: webapp
+          image: pitstop/webapp:1.0
+          ports:
+            - containerPort: 7005 
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Production
+              
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: webapp-service
+  namespace: ingress-nginx
+spec:
+  type: LoadBalancer
+  #clusterIP: 10.100.54.116
+  ports:
+  - name: "7005"
+    port: 80
+    targetPort: 7005
+  selector:
+    app: webapp
+
+          
