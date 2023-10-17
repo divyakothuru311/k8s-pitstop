@@ -25,10 +25,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: mailserver-service
+  name: mailserver
   namespace: ingress-nginx
 spec:
-  type: NodePort
+  type: ClusterIP
   ports:
   - name: "smtp"
     port: 25
@@ -36,7 +36,6 @@ spec:
   - name: "web"
     port: 4000
     targetPort: 80
-    nodePort: 30002
   selector:
     app: mailserver
 

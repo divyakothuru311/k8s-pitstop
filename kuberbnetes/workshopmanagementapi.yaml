@@ -32,15 +32,15 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: workshopmanagementapi-service
+  name: workshopmanagementapi
   namespace: ingress-nginx
 spec:
+  type: ClusterIP
   ports:
   - name: http-5200
-    nodePort: 30007
     port: 5200
     targetPort: 5200
   selector:
     app: workshopmanagementapi
-  type: NodePort
+
 

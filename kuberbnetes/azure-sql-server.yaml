@@ -32,14 +32,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: sqlserver-service
+  name: sqlserver
   namespace: ingress-nginx
 spec:
-  type: NodePort
+  type: ClusterIP
   ports:
   - name: "tds"
     port: 1433
     targetPort: 1433
-    nodePort: 30000
   selector:
     app: azuresql

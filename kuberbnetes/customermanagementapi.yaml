@@ -32,15 +32,14 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: customermanagementapi-service
+  name: customermanagementapi
   namespace: ingress-nginx
 spec:
-  type: NodePort
+  type: ClusterIP
   ports:
   - name: "http-5100"
     port: 5100
     targetPort: 5100
-    nodePort: 30005
   selector:
     app: customermanagementapi  
 

@@ -32,15 +32,14 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: logserver-service
+  name: logserver
   namespace: ingress-nginx
 spec:
-  type: NodePort
+  type: ClusterIP
   ports:
   - name: "http-5341"
     port: 5341
     targetPort: 80
-    nodePort: 30003
   selector:
     app: logserver
     
