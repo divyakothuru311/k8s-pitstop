@@ -36,7 +36,6 @@ metadata:
   namespace: ingress-nginx
 spec:
   type: NodePort
-  # clusterIP: 10.100.245.125
   ports:
   - name: "http-5100"
     port: 5100

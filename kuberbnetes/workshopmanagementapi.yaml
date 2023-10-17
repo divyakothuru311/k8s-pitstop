@@ -43,4 +43,4 @@ spec:
   selector:
     app: workshopmanagementapi
   type: NodePort
-  # clusterIP:  10.100.16.170
+
